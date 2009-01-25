@@ -45,6 +45,7 @@ namespace :epl do
     end
   end
   
+  desc "Only fetch the league table"
   task :fetch_table do 
     git_repo = ENV['epl_git_repo']
     if !File.exists?(git_repo)
