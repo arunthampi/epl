@@ -12,5 +12,13 @@ module Futbol
         'competition' => competition, 'unix_time' => unix_time
       }.to_json
     end
+    
+    def to_plist_node
+      Plist::Emit.dump({
+        'details' => details, 'date' => date, 'gmt_time' => gmt_time,
+        'competition' => competition, 'unix_time' => unix_time
+      }, false)
+    end
+    
   end
 end 

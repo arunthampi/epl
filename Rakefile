@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'json'
-require 'rubygems'
+require 'plist'
+
 require 'hpricot'
 require 'open-uri'
 require 'chronic'
@@ -27,17 +28,28 @@ namespace :epl do
       
       all_teams.each do |team|
         FileUtils.mkdir_p(File.join(git_repo, "js", "epl", "teams", "fixtures"))
+        FileUtils.mkdir_p(File.join(git_repo, "plists", "epl", "teams", "fixtures"))
+        
         schedules_parser = Futbol::SchedulesParser.new(team.id, team.name)
         fixtures = schedules_parser.parse_schedules
         
         File.open(File.join(git_repo, "js", "epl", "teams", "fixtures", "#{team.id}.js"), 'w') do |out|
           out.puts(fixtures.to_json)
         end
+        
+        File.open(File.join(git_repo, "plists", "epl", "teams", "fixtures", "#{team.id}.plist"), 'w') do |out|
+          out.puts(fixtures.to_plist)
+        end
+        
         puts "Finished writing Fixtures for #{team.id}, #{team.name}"
       end
       
       File.open(File.join(git_repo, "js", "epl", "all_teams.js"), 'w') do |out|
         out.puts(all_teams.to_json)
+      end
+
+      File.open(File.join(git_repo, "plists", "epl", "all_teams.plist"), 'w') do |out|
+        out.puts(all_teams.to_plist)
       end
       
       puts "Finished writing all_teams JSON"
@@ -60,7 +72,7 @@ namespace :epl do
         out.puts(all_teams.to_json)
       end
       
-      puts "Finished writing all_teams JSON"
+      puts "Finished writing all_teams JSON and plists"
       puts "*Done*"
     end
   end
